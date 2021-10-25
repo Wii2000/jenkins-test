@@ -1,0 +1,38 @@
+#!groovy
+
+properties([disableConcurrentBuilds()])
+
+pipeline {
+        agent any
+
+        environment {
+            PATH = "/opt/homebrew/Cellar/maven/3.8.1/bin:$PATH"
+        }
+
+        triggers { pollSCM('* * * * *') }
+
+        options {
+                buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
+                timestamps()
+        }
+
+        stages {
+            stage('git clone') {
+                steps {
+                    git credentialsId: '6c1477d8-c0fa-42e5-b510-fe54e8cffe0a', url: 'https://github.com/Wii2000/jenkins-test'
+                }
+            }
+            stage('build') {
+                steps {
+                    sh "mvn clean install"
+                }
+            }
+            stage('deploy') {
+                steps {
+                     sshagent(['deploy_user']) {
+                        sh "scp -o StrictHostKeyChecking=no target/jenkins-test.war tomcat@192.168.0.105:/opt/tomcat/webapps"
+                    }
+                }
+            }
+        }
+}
