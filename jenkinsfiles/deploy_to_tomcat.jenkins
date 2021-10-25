@@ -29,7 +29,7 @@ pipeline {
             }
             stage('deploy') {
                 steps {
-                     sshagent(['deploy_user']) {
+                     sshagent(['f00bfed7-5dd2-4606-8afa-22acdd1ff399']) {
                         sh "scp -o StrictHostKeyChecking=no target/jenkins-test.war tomcat@192.168.0.105:/opt/tomcat/webapps"
                     }
                 }
