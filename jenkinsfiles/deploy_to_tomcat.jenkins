@@ -19,7 +19,7 @@ pipeline {
         stages {
             stage('git clone') {
                 steps {
-                    git credentialsId: '6c1477d8-c0fa-42e5-b510-fe54e8cffe0a', url: 'https://github.com/Wii2000/jenkins-test'
+                    git credentialsId: 'f00bfed7-5dd2-4606-8afa-22acdd1ff399', url: 'git@github.com:Wii2000/jenkins-test.git'
                 }
             }
             stage('build') {
